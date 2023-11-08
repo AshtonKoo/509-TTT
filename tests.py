@@ -11,6 +11,6 @@ winner = get_winner(test_board)
 print(winner)
 
 # Nobody win
-test_board = [[None,"O","X"],["O",None,"X"],["O",None,"O"]]
+test_board = [[None,"O","X"],["O",None,"X"],["O","O",None]]
 winner = get_winner(test_board)
 print(winner)

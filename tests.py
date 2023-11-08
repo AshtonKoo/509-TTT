@@ -10,7 +10,7 @@ test_board = [["O","O","X"],["O",None,"X"],["O",None,"X"]]
 winner = get_winner(test_board)
 print(winner)
 
-# Nobody win
+# Draw
 test_board = [[None,"O","X"],["O",None,"X"],["O","O",None]]
 winner = get_winner(test_board)
 print(winner)

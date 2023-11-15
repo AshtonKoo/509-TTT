@@ -3,29 +3,49 @@
 # should be unit-testable.
 
 
-def make_empty_board():
-    return [
-        [None, None, None],
-        [None, None, None],
-        [None, None, None],
-    ]
+import random
 
+class Game:
+    def __init__(self, player1, player2):
+        self.board = [[None, None, None] for _ in range(3)]
+        self.current_player = player1
+        self.other_player = player2
 
-def get_winner(board):
-    for i in range(3):
-        if board[i][0] == board[i][1] == board[i][2] and board[i][0]:
-            return board[i][0]
-        if board[0][i] == board[1][i] == board[2][i] and board[0][i]:
-            return board[0][i]
-    if board[0][0] == board[1][1] == board[2][2] and board[0][0]:
-        return board[0][0]
-    if board[0][2] == board[1][1] == board[2][0] and board[0][2]:
-        return board[0][2]
-    return None
+    def play_turn(self):
+        x, y = self.current_player.get_move(self.board)
+        self.board[x][y] = self.current_player.symbol
+        self.current_player, self.other_player = self.other_player, self.current_player
 
-def other_player(player):
-    """Given the character for a player, returns the other player."""
-    if player == 'X':
-       return 'O'
-    elif player == 'O':
-       return 'X'
+    def get_winner(self):
+
+            for row in self.board:
+                if row[0] == row[1] == row[2] and row[0] is not None:
+                    return row[0]
+
+            for i in range(3):
+                if self.board[0][i] == self.board[1][i] == self.board[2][i] and self.board[0][i] is not None:
+                    return self.board[0][i]
+
+            if self.board[0][0] == self.board[1][1] == self.board[2][2] and self.board[0][0] is not None:
+                return self.board[0][0]
+            if self.board[0][2] == self.board[1][1] == self.board[2][0] and self.board[0][2] is not None:
+                return self.board[0][2]
+
+            return None
+
+    def is_draw(self):
+        return all(all(cell is not None for cell in row) for row in self.board)
+
+class Player:
+    def __init__(self, symbol):
+        self.symbol = symbol
+
+    def get_move(self, board):
+        x, y = map(int, input(f"Enter the position of (x,y) for {self.symbol}, split with comma: ").split(","))
+        return x, y
+
+class Bot(Player):
+    def get_move(self, board):
+        # Simple bot logic: choose a random empty spot
+        empty_spots = [(x, y) for x in range(3) for y in range(3) if board[x][y] is None]
+        return random.choice(empty_spots) if empty_spots else (0, 0)
